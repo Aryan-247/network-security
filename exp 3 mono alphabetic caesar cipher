@@ -1,0 +1,61 @@
+Monoalphabetic cisear cipher
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+#define pf printf
+#define sf scanf
+
+char dc[27] = "XDGSZANYOBTMJCEVFHKWPLQURI"; // 26 letters + null terminator
+char ec[27] = "abcdefghijklmnopqrstuvwxyz";
+
+void e(char*);
+void d(char*);
+
+int main() {
+    char p[100]; // Use larger buffer to handle full sentence
+
+    pf("\n\nEnter plain text: ");
+    fgets(p, sizeof(p), stdin);
+
+    // Remove trailing newline from fgets if exists
+    size_t len = strlen(p);
+    if (len > 0 && p[len - 1] == '\n') {
+        p[len - 1] = '\0';
+    }
+
+    pf("\nAfter Encryption:\n-----------------\n");
+    e(p);
+    pf("%s\n", p);
+
+    pf("\nAfter Decryption:\n-----------------\n");
+    d(p);
+    pf("%s\n", p);
+
+    return 0;
+}
+
+void d(char *p) {
+    int l = 0, m = 0;
+    while (*(p + l) != '\0') {
+        if (islower(*(p + l))) {
+            m = *(p + l) - 'a';
+            *(p + l) = dc[m];
+        }
+        l++;
+    }
+}
+
+void e(char *p) {
+    int l = 0;
+    while (*(p + l) != '\0') {
+        int i;
+        for (i = 0; i < 26; i++) {
+            if (dc[i] == *(p + l)) {
+                *(p + l) = ec[i];
+                break;
+            }
+        }
+        l++;
+    }
+}
